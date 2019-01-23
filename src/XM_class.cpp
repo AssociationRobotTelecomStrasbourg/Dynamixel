@@ -33,11 +33,9 @@ XM::XM(const uint8_t id, const char* port_name, const int baudrate)
         else
         {
             uint16_t addr = XM430_W210_control_table["ID"].address;
-            std::cout << addr << std::endl;
             id_ = id;
-            std::cout << id_ << std::endl;
             write1ByteTxRx(port_num_,PROTOCOL,id_,addr,id);
-            std::cout << "Set up XM on " << getPortName(port_num_) << "\n\tBaudrate : " << getBaudRate(port_num_) << "\n\tID : " << read1ByteTxRx(port_num_,PROTOCOL,id_,addr) << std::endl;
+            std::cout << "Set up XM on " << getPortName(port_num_) << "\n\tBaudrate : " << getBaudRate(port_num_) << "\n\tID : " << (int)read1ByteTxRx(port_num_,PROTOCOL,id_,addr) << std::endl;
         }
     }
 }
