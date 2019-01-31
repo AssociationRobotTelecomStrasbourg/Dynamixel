@@ -1,10 +1,7 @@
 #ifndef XM_CLASS_H
 #define XM_CLASS_H
 
-extern "C"
-{
-    #include "robotis_def.h"
-}
+#include <cstdint>
 
 class XM
 {
@@ -37,13 +34,13 @@ class XM
         5 : Current-based Position Control Mode (controls both position and torque, up to 512 turns)
         16 : PWM Control Mode (not implemented here)*/
 
-        bool setGoalPosition(uint32_t goal_pos);
-        bool setGoalVelocity(uint32_t goal_vel);
-        bool setGoalCurrent(uint32_t goal_cur);
+        bool setGoalPosition(int32_t goal_pos);
+        bool setGoalVelocity(int32_t goal_vel);
+        bool setGoalCurrent(int16_t goal_cur);
 
-        uint32_t getPresentPosition();
-        uint32_t getPresentVelocity();
-        uint32_t getPresentCurrent();
+        int32_t getPresentPosition();
+        int32_t getPresentVelocity();
+        int16_t getPresentCurrent();
 };
 
 #endif // XM_CLASS_H

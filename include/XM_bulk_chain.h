@@ -1,12 +1,10 @@
 #ifndef XM_BULK_CHAIN
 #define XM_BULK_CHAIN
 
-extern "C"
-{
-    #include "robotis_def.h"
-}
+#include <cstdint>
 
-#include <vector>
+#include <set>
+#include <unordered_map>
 
 class XM_bulk_chain
 {
@@ -14,12 +12,14 @@ class XM_bulk_chain
         int port_num_;
         int groupread_num_;
         int groupwrite_num_;
-        std::vector<uint8_t> id_list_;
+        std::set<uint8_t> id_list_;
+        std::unordered_map<uint8_t,char*> param_monitor_list_;
     public :
-        XM_bulk_chain(const char* port_name="/dev/ttyUSB0", const int baudrate=57600);
+        XM_bulk_chain(const char* port_name="/dev/ttyUSB0", const int baudrate=57600, const uint8_t max_id=8); //construct id list for ids up to max_id
         ~XM_bulk_chain();
 
-        void reset(uint8_t id); // 0xFF : all parameters; 0x01 : all but ID; 0x02 : all but ID and baudrate
+        std::set<uint8_t> getIDlist();
+
         void reboot(uint8_t id);
 
         void ledOn(uint8_t id);
@@ -41,12 +41,16 @@ class XM_bulk_chain
         5 : Current-based Position Control Mode (controls both position and torque, up to 512 turns)
         16 : PWM Control Mode (not implemented here)*/
 
-        bool setGoalPosition(uint8_t id, uint32_t goal_pos);
-        bool setGoalVelocity(uint8_t id, uint32_t goal_vel);
-        bool setGoalCurrent(uint8_t id, uint32_t goal_cur);
+        bool setParam(uint8_t id, const char* paramName, const uint8_t paramValue);
+        bool setParam(uint8_t id, const char* paramName, const int16_t paramValue);
+        bool setParam(uint8_t id, const char* paramName, const int32_t paramValue);
+        bool write(); //send packet with the parameters set with setParam
 
-        bool monitorParam(uint8_t id, const char* paramName);
-
+        bool monitorParam(uint8_t id, char* paramName);
+        bool poll(); //poll dynamixel to get a packet containing the data set with monitorParam
+        void getData(uint8_t id, uint8_t& d); //get monitored parameter set with monitorParam from packet received after the call of poll
+        void getData(uint8_t id, int16_t& d);
+        void getData(uint8_t id, int32_t& d);
 };
 
 #endif

@@ -26,3 +26,18 @@ add_library(dxlsdk SHARED ${dxl_files})
 
 add_executable(XM_class_test.exe src/XM_class_test.cpp src/XM_class.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(XM_class_test.exe dxlsdk ncurses)
+
+add_executable(XM_bulk_chain_test.exe src/XM_bulk_chain_test.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(XM_bulk_chain_test.exe dxlsdk)
+
+add_executable(Arm_test.exe src/Arm.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(Arm_test.exe dxlsdk)
+
+add_executable(Chain_reboot.exe src/Chain_reboot.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(Chain_reboot.exe dxlsdk)
+
+add_executable(Chain_monitor.exe src/Chain_monitor.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(Chain_monitor.exe dxlsdk)
+
+add_executable(Chain_toroff.exe src/Chain_toroff.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(Chain_toroff.exe dxlsdk)

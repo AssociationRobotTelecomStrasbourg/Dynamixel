@@ -14,7 +14,7 @@ WINDOW *scrn;
 
 int main(int argc, char** argv)
 {
-    uint32_t goal_vel = 20; // default velocity
+    int32_t goal_vel = 20; // default velocity
     if (argc > 1)
     {goal_vel = atoi(argv[1]);}
     createControlTable();
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
         noecho();
         cbreak();
         nodelay(scrn,TRUE);
-        uint32_t vel;
+        int32_t vel;
         while(true)
         {
             vel = M1.getPresentVelocity();

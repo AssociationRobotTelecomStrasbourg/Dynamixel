@@ -1,10 +1,7 @@
 #ifndef XM430_W210_CONTROL_TABLE_H
 #define XM430_W210_CONTROL_TABLE_H
 
-extern "C"
-{
-    #include "robotis_def.h"
-}
+#include <cstdint>
 
 #include <unordered_map>
 #include <string>
@@ -17,10 +14,10 @@ typedef struct
 	const char*			short_description;
 	const char*			description;
 	uint8_t					access;
-	long					initial;
+	int32_t					initial;
 	uint8_t					data_type;
-	long					range_min;
-	long					range_max;
+	int32_t					range_min;
+	int32_t					range_max;
 	double					unit_quantum;
 	const char*			unit_name;
 }	dxl_registers_struct_type;
