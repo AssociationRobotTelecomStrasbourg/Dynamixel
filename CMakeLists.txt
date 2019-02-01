@@ -36,8 +36,14 @@ target_link_libraries(Arm_test.exe dxlsdk)
 add_executable(Chain_reboot.exe src/Chain_reboot.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(Chain_reboot.exe dxlsdk)
 
-add_executable(Chain_monitor.exe src/Chain_monitor.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
-target_link_libraries(Chain_monitor.exe dxlsdk)
+add_executable(Chain_monitor_example.exe src/Chain_monitor_example.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(Chain_monitor_example.exe dxlsdk)
 
 add_executable(Chain_toroff.exe src/Chain_toroff.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(Chain_toroff.exe dxlsdk)
+
+add_executable(arm_demo.exe src/arm_demo.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(arm_demo.exe dxlsdk ncurses)
+
+add_executable(mod_param.exe src/mod_param.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(mod_param.exe dxlsdk)

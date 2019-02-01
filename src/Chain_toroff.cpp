@@ -4,7 +4,6 @@
 
 extern "C"
 {
-    #include <ncurses.h>
     #include <stdlib.h>
 }
 

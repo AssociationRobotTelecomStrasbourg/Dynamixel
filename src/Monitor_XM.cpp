@@ -11,13 +11,16 @@ int main(int argc, char** argv)
 {
     createControlTable();
     XM_bulk_chain Chain;
+
     if(argc>1)
     {
-        uint8_t id=atoi(argv[1]);
-        Chain.reboot(id);
-        std::cout << "ID " << (int)id << " rebooted" << std::endl;
+        int id = atoi(argv[1]);
+
+        return 0;
     }
     else
-    {std::cout << "No ID given" << std::endl;}
-    return 0;
+    {
+        std::cerr << "Set ID to monitor" << std::endl;
+        return -1;
+    }
 }

@@ -4,7 +4,6 @@
 
 extern "C"
 {
-    #include <ncurses.h>
     #include <stdlib.h>
 }
 
@@ -18,10 +17,10 @@ int main(int argc, char** argv)
         Chain.torqueOn(id);
     }
 
-    int32_t goal_pos[]={2000,2000,2100,2000,2048};
+    int32_t goal_pos[]={2048,2048,2048,2048,2500};
     for(int id=1;id<6;id++)
     {
-        Chain.setParam(id,"Goal Position",*(goal_pos+id));
+        Chain.setParam(id,"Goal Position",*(goal_pos+(id-1)));
     }
     Chain.write();
 
@@ -33,8 +32,8 @@ int main(int argc, char** argv)
     Chain.poll();
     for(int id=1;id<6;id++)
     {
-        Chain.getData(id,*(pos+id));
-        std::cout << "[ID " << id << "]" << "Present pos : " << (long)*(pos+id) << std::endl;
+        Chain.getData(id,*(pos+(id-1)));
+        std::cout << "[ID " << id << "]" << "Present pos : " << (long)*(pos+(id-1)) << std::endl;
     }
     return 0;
 }

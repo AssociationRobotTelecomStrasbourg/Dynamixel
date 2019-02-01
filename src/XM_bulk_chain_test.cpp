@@ -4,7 +4,6 @@
 
 extern "C"
 {
-    #include <ncurses.h>
     #include <stdlib.h>
 }
 
@@ -12,15 +11,15 @@ int main(int argc, char** argv)
 {
     createControlTable();
     XM_bulk_chain Chain;
-    
-    Chain.torqueOn(5);
-    int32_t goal_pos=2500;
-    Chain.setParam(5,"Goal Position",goal_pos);
+
+    Chain.torqueOff(5);
+    uint8_t op_mode=0;
+    Chain.setParam(5,"Operating Mode",op_mode);
     Chain.write();
-    Chain.monitorParam(5,"Present Position");
+    Chain.monitorParam(5,"Operating Mode");
     Chain.poll();
-    int32_t pos;
-    Chain.getData(5,pos);
-    std::cout << "Present pos : " << (long)pos << std::endl;
+    uint8_t op_mode_check;
+    Chain.getData(5,op_mode_check);
+    std::cout << "Operating Mode : " << (long)op_mode_check << std::endl;
     return 0;
 }

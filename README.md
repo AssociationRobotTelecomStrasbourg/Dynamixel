@@ -9,6 +9,8 @@ Source originale : [Robotis](https://github.com/ROBOTIS-GIT/DynamixelSDK)
 Code en C++ permettant de contrôler un moteur plus aisément :
 - Control_Table contient les variables de contrôle des dynamixels (adresse mémoire, valeurs limites, taille, etc...)
 - XM_class comprend une classe qui gère l'initialisation et le contrôle d'un unique moteur
+- XM_bulk_chain comprend une classe qui gère l'écriture simultanée de différents paramètres sur les moteurs connectés
+- XM_sync_chain comprend une classe qui gère l'écriture simultanée d'un unique paramètre (mais pouvant prendre plusieurs valeurs pour chaque moteur) sur les moteurs connectés
 
 ## Utilisation
 Pour utiliser cette bibliothèque, il faut d'abord installer ncurses : sudo apt-get install libncurses5-dev libncursesw5-dev
