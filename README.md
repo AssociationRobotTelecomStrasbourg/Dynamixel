@@ -1,21 +1,19 @@
 # Dynamixel
-Bibliothèque de fonctions et classes pour l'utilisation des moteurs dynamixels XM430-W210.
+C++ library for dynamixel motors (XM430-W210 at the moment).
 
-## Contenu
+## Content
 ### dynamixel_sdk_c
-Code source en C utilisé pour le développement de la bibliothèque.
-Source originale : [Robotis](https://github.com/ROBOTIS-GIT/DynamixelSDK)
-### XM_class et Control_Table
-Code en C++ permettant de contrôler un moteur plus aisément :
-- Control_Table contient les variables de contrôle des dynamixels (adresse mémoire, valeurs limites, taille, etc...)
-- XM_class comprend une classe qui gère l'initialisation et le contrôle d'un unique moteur
-- XM_bulk_chain comprend une classe qui gère l'écriture simultanée de différents paramètres sur les moteurs connectés
-- XM_sync_chain comprend une classe qui gère l'écriture simultanée d'un unique paramètre (mais pouvant prendre plusieurs valeurs pour chaque moteur) sur les moteurs connectés
+C source code used in the library.
+Source : [Robotis](https://github.com/ROBOTIS-GIT/DynamixelSDK)
+### XM_class and Control_Table
+C++ code aiming to facilitate the use of the dynamixel motors :
+- Control_Table contains structures storing info on control items (name, data type, length, ...)
+- XM_class : initialization and control of a unique motor
+- XM_bulk_chain : initialization and control of several motors with different control items simultaneously
+- XM_sync_chain : initialization and control of several motors with a unique control item at a given time (TODO)
 
-## Utilisation
-Pour utiliser cette bibliothèque, il faut d'abord installer ncurses : sudo apt-get install libncurses5-dev libncursesw5-dev
-
-Pour l'installer :
+## How to use
+To compile this library :
 - git clone https://github.com/AssociationRobotTelecomStrasbourg/Dynamixel.git
 - cd ARTS_Dynamixel
 - mkdir bin build lib && cd build

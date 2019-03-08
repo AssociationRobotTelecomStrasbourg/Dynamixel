@@ -34,11 +34,11 @@ XM_bulk_chain::XM_bulk_chain(uint8_t max_id, const int baudrate, const char* por
                     id_list_.insert(id);
                 }
   	        }
-            std::cout << "Set up XM Chain on " << getPortName(port_num_) << " with baudrate " << getBaudRate(port_num_);
-            std::cout << "\nIDs : " << std::endl;
+            std::cerr << "Set up XM Chain on " << getPortName(port_num_) << " with baudrate " << getBaudRate(port_num_);
+            std::cerr << "\nIDs : " << std::endl;
             for(std::set<uint8_t>::iterator i=id_list_.begin(); i!=id_list_.end(); ++i)
             {
-                std::cout << "\t" << (int)*i << std::endl;
+                std::cerr << "\t" << (int)*i << std::endl;
             }
         }
     }
@@ -46,7 +46,10 @@ XM_bulk_chain::XM_bulk_chain(uint8_t max_id, const int baudrate, const char* por
 
 XM_bulk_chain::~XM_bulk_chain()
 {
+    std::cerr << "Deleting XM Bulk Chain object...";
+    clearPort(port_num_);
     closePort(port_num_);
+    std::cerr << "Done" << std::endl;
 }
 
 std::set<uint8_t> XM_bulk_chain::getIDlist()
@@ -139,15 +142,15 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint8_t pa
         if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
-            uint8_t length = XM430_W210_control_table[paramName].size;
-            if(length==1)
+            uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            if(data_type==0)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,length,paramValue,length);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
                 return(success);
             }
             else
             {
-                std::cerr << "Can't add param to write list : Invalid param length" << std::endl;
+                std::cerr << "Can't add param to write list : Invalid param data_type" << std::endl;
                 return(false);
             }
         }
@@ -164,22 +167,22 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint8_t pa
     }
 }
 
-bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int16_t paramValue)
+bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int8_t paramValue)
 {
     if (id_list_.find(id)!=id_list_.end())
     {
         if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
-            uint8_t length = XM430_W210_control_table[paramName].size;
-            if(length==2)
+            uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            if(data_type==1)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,length,paramValue,length);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
                 return(success);
             }
             else
             {
-                std::cerr << "Can't add param to write list : Invalid param length" << std::endl;
+                std::cerr << "Can't add param to write list : Invalid param data_type" << std::endl;
                 return(false);
             }
         }
@@ -203,15 +206,15 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint16_t p
         if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
-            uint8_t length = XM430_W210_control_table[paramName].size;
-            if(length==4)
+            uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            if(data_type==2)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,length,paramValue,length);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
                 return(success);
             }
             else
             {
-                std::cerr << "Can't add param to write list : Invalid param length" << std::endl;
+                std::cerr << "Can't add param to write list : Invalid param data_type" << std::endl;
                 return(false);
             }
         }
@@ -228,22 +231,22 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint16_t p
     }
 }
 
-bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int32_t paramValue)
+bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int16_t paramValue)
 {
     if (id_list_.find(id)!=id_list_.end())
     {
         if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
-            uint8_t length = XM430_W210_control_table[paramName].size;
-            if(length==4)
+            uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            if(data_type==3)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,length,paramValue,length);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
                 return(success);
             }
             else
             {
-                std::cerr << "Can't add param to write list : Invalid param length" << std::endl;
+                std::cerr << "Can't add param to write list : Invalid param data_type" << std::endl;
                 return(false);
             }
         }
@@ -267,15 +270,47 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint32_t p
         if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
-            uint8_t length = XM430_W210_control_table[paramName].size;
-            if(length==4)
+            uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            if(data_type==4)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,length,paramValue,length);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
                 return(success);
             }
             else
             {
-                std::cerr << "Can't add param to write list : Invalid param length" << std::endl;
+                std::cerr << "Can't add param to write list : Invalid param data_type" << std::endl;
+                return(false);
+            }
+        }
+        else
+        {
+            std::cerr << "Can't add param to write list : Invalid param name" << std::endl;
+            return(false);
+        }
+    }
+    else
+    {
+        std::cerr << "Can't add param to write list : ID not in list" << std::endl;
+        return(false);
+    }
+}
+
+bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int32_t paramValue)
+{
+    if (id_list_.find(id)!=id_list_.end())
+    {
+        if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            if(data_type==5)
+            {
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
+                return(success);
+            }
+            else
+            {
+                std::cerr << "Can't add param to write list : Invalid param data_type" << std::endl;
                 return(false);
             }
         }
@@ -371,7 +406,7 @@ void XM_bulk_chain::getData(uint8_t id, uint8_t& d)
     }
 }
 
-void XM_bulk_chain::getData(uint8_t id, int16_t& d)
+void XM_bulk_chain::getData(uint8_t id, int8_t& d)
 {
     if(param_monitor_list_.find(id)!=param_monitor_list_.end())
     {
@@ -409,7 +444,7 @@ void XM_bulk_chain::getData(uint8_t id, uint16_t& d)
     }
 }
 
-void XM_bulk_chain::getData(uint8_t id, int32_t& d)
+void XM_bulk_chain::getData(uint8_t id, int16_t& d)
 {
     if(param_monitor_list_.find(id)!=param_monitor_list_.end())
     {
@@ -429,6 +464,25 @@ void XM_bulk_chain::getData(uint8_t id, int32_t& d)
 }
 
 void XM_bulk_chain::getData(uint8_t id, uint32_t& d)
+{
+    if(param_monitor_list_.find(id)!=param_monitor_list_.end())
+    {
+        if(groupBulkReadIsAvailable(groupread_num_,id,XM430_W210_control_table[param_monitor_list_[id]].address,XM430_W210_control_table[param_monitor_list_[id]].size))
+        {
+            d = groupBulkReadGetData(groupread_num_,id,XM430_W210_control_table[param_monitor_list_[id]].address,XM430_W210_control_table[param_monitor_list_[id]].size);
+        }
+        else
+        {
+            std::cerr << "Get data failed for ID : " << (int)id << std::endl;
+        }
+    }
+    else
+    {
+        std::cerr << "No parameter is set for monitoring for given ID : " << (int)id << std::endl;
+    }
+}
+
+void XM_bulk_chain::getData(uint8_t id, int32_t& d)
 {
     if(param_monitor_list_.find(id)!=param_monitor_list_.end())
     {

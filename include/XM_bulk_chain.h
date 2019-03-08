@@ -42,19 +42,21 @@ class XM_bulk_chain
         16 : PWM Control Mode (not implemented here)*/
 
         bool setParam(uint8_t id, const char* paramName, const uint8_t paramValue);
-        bool setParam(uint8_t id, const char* paramName, const int16_t paramValue);
+        bool setParam(uint8_t id, const char* paramName, const int8_t paramValue);
         bool setParam(uint8_t id, const char* paramName, const uint16_t paramValue);
-        bool setParam(uint8_t id, const char* paramName, const int32_t paramValue);
+        bool setParam(uint8_t id, const char* paramName, const int16_t paramValue);
         bool setParam(uint8_t id, const char* paramName, const uint32_t paramValue);
+        bool setParam(uint8_t id, const char* paramName, const int32_t paramValue);
         bool write(); //send packet with the parameters set with setParam
 
         bool monitorParam(uint8_t id, char* paramName);
         bool poll(); //poll dynamixel to get a packet containing the data set with monitorParam
         void getData(uint8_t id, uint8_t& d); //get monitored parameter set with monitorParam from packet received after the call of poll
-        void getData(uint8_t id, int16_t& d);
+        void getData(uint8_t id, int8_t& d);
         void getData(uint8_t id, uint16_t& d);
-        void getData(uint8_t id, int32_t& d);
+        void getData(uint8_t id, int16_t& d);
         void getData(uint8_t id, uint32_t& d);
+        void getData(uint8_t id, int32_t& d);
 };
 
 #endif

@@ -12,9 +12,9 @@ extern dxl_control_table XM430_W210_control_table;
 
 #define PROTOCOL 2.0
 
-XM::XM(const uint8_t id, const char* port_name, const int baudrate)
+XM::XM(const uint8_t id, const int baudrate, const char* port_name)
 {
-    //std::cout << "Setting up XM motor on port " << port_name << "..." << std::endl;
+    //std::cerr << "Setting up XM motor on port " << port_name << "..." << std::endl;
     bool op_success = false;
     port_num_ = portHandler(port_name);
     packetHandler();
@@ -35,14 +35,17 @@ XM::XM(const uint8_t id, const char* port_name, const int baudrate)
             uint16_t addr = XM430_W210_control_table["ID"].address;
             id_ = id;
             write1ByteTxRx(port_num_,PROTOCOL,id_,addr,id);
-            std::cout << "Set up XM on " << getPortName(port_num_) << "\n\tBaudrate : " << getBaudRate(port_num_) << "\n\tID : " << (int)read1ByteTxRx(port_num_,PROTOCOL,id_,addr) << std::endl;
+            std::cerr << "Set up XM on " << getPortName(port_num_) << "\n\tBaudrate : " << getBaudRate(port_num_) << "\n\tID : " << (int)read1ByteTxRx(port_num_,PROTOCOL,id_,addr) << std::endl;
         }
     }
 }
 
 XM::~XM()
 {
+    std::cerr << "Deleting XM object...";
+    clearPort(port_num_);
     closePort(port_num_);
+    std::cerr << "Done" << std::endl;
 }
 
 void XM::reset(uint8_t option)
@@ -149,4 +152,281 @@ int16_t XM::getPresentCurrent()
     uint16_t addr = XM430_W210_control_table["Present Current"].address;
     int16_t pres_cur = read2ByteTxRx(port_num_,PROTOCOL,id_,addr);
     return pres_cur;
+}
+
+bool XM::generic_write(const char* paramName, uint8_t paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==0)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            write1ByteTxRx(port_num_,PROTOCOL,id_,addr,paramValue);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_write(const char* paramName, int8_t paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==1)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            write1ByteTxRx(port_num_,PROTOCOL,id_,addr,paramValue);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_write(const char* paramName, uint16_t paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==2)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            write2ByteTxRx(port_num_,PROTOCOL,id_,addr,paramValue);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_write(const char* paramName, int16_t paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==3)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            write2ByteTxRx(port_num_,PROTOCOL,id_,addr,paramValue);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_write(const char* paramName, uint32_t paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==4)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            write4ByteTxRx(port_num_,PROTOCOL,id_,addr,paramValue);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_write(const char* paramName, int32_t paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==5)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            write4ByteTxRx(port_num_,PROTOCOL,id_,addr,paramValue);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+
+bool XM::generic_read(const char* paramName, uint8_t& paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==0)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            paramValue = read1ByteTxRx(port_num_,PROTOCOL,id_,addr);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_read(const char* paramName, int8_t& paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==1)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            paramValue = read1ByteTxRx(port_num_,PROTOCOL,id_,addr);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_read(const char* paramName, uint16_t& paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==2)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            paramValue = read2ByteTxRx(port_num_,PROTOCOL,id_,addr);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_read(const char* paramName, int16_t& paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==3)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            paramValue = read2ByteTxRx(port_num_,PROTOCOL,id_,addr);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_read(const char* paramName, uint32_t& paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==4)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            paramValue = read4ByteTxRx(port_num_,PROTOCOL,id_,addr);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
+}
+
+bool XM::generic_read(const char* paramName, int32_t& paramValue)
+{
+    if(XM430_W210_control_table.find(paramName)!=XM430_W210_control_table.end())
+    {
+        if(XM430_W210_control_table[paramName].data_type==5)
+        {
+            uint16_t addr = XM430_W210_control_table[paramName].address;
+            paramValue = read4ByteTxRx(port_num_,PROTOCOL,id_,addr);
+            return 1;
+        }
+        else
+        {
+            std::cerr << "Error : Wrong data type for given param" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        std::cerr << "Error : Invalid parameter name" << std::endl;
+        return 0;
+    }
 }
