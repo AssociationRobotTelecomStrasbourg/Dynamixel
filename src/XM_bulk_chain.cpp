@@ -143,9 +143,10 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint8_t pa
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
             uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            uint8_t size = XM430_W210_control_table[paramName].size;
             if(data_type==0)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,size,paramValue,size);
                 return(success);
             }
             else
@@ -175,9 +176,10 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int8_t par
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
             uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            uint8_t size = XM430_W210_control_table[paramName].size;
             if(data_type==1)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,size,paramValue,size);
                 return(success);
             }
             else
@@ -207,9 +209,10 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint16_t p
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
             uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            uint8_t size = XM430_W210_control_table[paramName].size;
             if(data_type==2)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,size,paramValue,size);
                 return(success);
             }
             else
@@ -239,9 +242,10 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int16_t pa
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
             uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            uint8_t size = XM430_W210_control_table[paramName].size;
             if(data_type==3)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,size,paramValue,size);
                 return(success);
             }
             else
@@ -271,9 +275,10 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const uint32_t p
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
             uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            uint8_t size = XM430_W210_control_table[paramName].size;
             if(data_type==4)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,size,paramValue,size);
                 return(success);
             }
             else
@@ -303,9 +308,10 @@ bool XM_bulk_chain::setParam(uint8_t id, const char* paramName, const int32_t pa
         {
             uint16_t addr = XM430_W210_control_table[paramName].address;
             uint8_t data_type = XM430_W210_control_table[paramName].data_type;
+            uint8_t size = XM430_W210_control_table[paramName].size;
             if(data_type==5)
             {
-                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,data_type,paramValue,data_type);
+                bool success=groupBulkWriteAddParam(groupread_num_,id,addr,size,paramValue,size);
                 return(success);
             }
             else
@@ -344,7 +350,7 @@ bool XM_bulk_chain::write()
     }
 }
 
-bool XM_bulk_chain::monitorParam(uint8_t id, char* paramName)
+bool XM_bulk_chain::monitorParam(uint8_t id, const char* paramName)
 {
     if (id_list_.find(id)!=id_list_.end())
     {

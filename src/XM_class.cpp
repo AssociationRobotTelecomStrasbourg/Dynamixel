@@ -48,6 +48,16 @@ XM::~XM()
     std::cerr << "Done" << std::endl;
 }
 
+bool XM::changeID(uint8_t id)
+{
+    uint8_t check;
+    uint16_t addr = XM430_W210_control_table["ID"].address;
+    write1ByteTxRx(port_num_,PROTOCOL,id_,addr,id);
+    id_=id;
+    check=read1ByteTxRx(port_num_,PROTOCOL,id_,addr);
+    return(check==id);
+}
+
 void XM::reset(uint8_t option)
 {
     factoryReset(port_num_,PROTOCOL,id_,option);

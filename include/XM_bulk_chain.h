@@ -13,7 +13,7 @@ class XM_bulk_chain
         int groupread_num_;
         int groupwrite_num_;
         std::set<uint8_t> id_list_;
-        std::unordered_map<uint8_t,char*> param_monitor_list_;
+        std::unordered_map<uint8_t,const char*> param_monitor_list_;
     public :
         XM_bulk_chain(const uint8_t max_id=8, const int baudrate=57600, const char* port_name="/dev/ttyUSB0"); //construct id list for ids up to max_id
         ~XM_bulk_chain();
@@ -39,7 +39,7 @@ class XM_bulk_chain
         3 : Position Control Mode
         4 : Extended Position Control Mode (multi-turn up to 512 turns)
         5 : Current-based Position Control Mode (controls both position and torque, up to 512 turns)
-        16 : PWM Control Mode (not implemented here)*/
+        16 : PWM Control Mode*/
 
         bool setParam(uint8_t id, const char* paramName, const uint8_t paramValue);
         bool setParam(uint8_t id, const char* paramName, const int8_t paramValue);
@@ -49,7 +49,7 @@ class XM_bulk_chain
         bool setParam(uint8_t id, const char* paramName, const int32_t paramValue);
         bool write(); //send packet with the parameters set with setParam
 
-        bool monitorParam(uint8_t id, char* paramName);
+        bool monitorParam(uint8_t id, const char* paramName);
         bool poll(); //poll dynamixel to get a packet containing the data set with monitorParam
         void getData(uint8_t id, uint8_t& d); //get monitored parameter set with monitorParam from packet received after the call of poll
         void getData(uint8_t id, int8_t& d);

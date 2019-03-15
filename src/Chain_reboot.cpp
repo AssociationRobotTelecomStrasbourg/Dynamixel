@@ -10,7 +10,7 @@ extern "C"
 int main(int argc, char** argv)
 {
     createControlTable();
-    XM_bulk_chain Chain;
+    XM_bulk_chain Chain(4,1000000);
     if(argc>1)
     {
         uint8_t id=atoi(argv[1]);

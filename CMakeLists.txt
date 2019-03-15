@@ -42,7 +42,7 @@ target_link_libraries(Chain_toroff.exe dxlsdk)
 add_executable(arm_demo_save.exe src/arm_demo_save.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(arm_demo_save.exe dxlsdk ncurses)
 
-add_executable(mod_param.exe src/mod_param.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+add_executable(mod_param.exe src/mod_param.cpp src/XM_class.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(mod_param.exe dxlsdk)
 
 add_executable(arm_demo_load.exe src/arm_demo_load.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
@@ -50,6 +50,16 @@ target_link_libraries(arm_demo_load.exe dxlsdk)
 
 add_executable(id.exe src/XM_model_identification.cpp src/XM_class.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(id.exe dxlsdk)
+set_target_properties(id.exe PROPERTIES OUTPUT_NAME identification)
 
 add_executable(Chain_change_baud.exe src/XM_bulk_chain_change_baudrate.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(Chain_change_baud.exe dxlsdk)
+
+add_executable(XM_bulk_chain_monitor.exe src/XM_bulk_chain_monitor.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(XM_bulk_chain_monitor.exe dxlsdk ncurses)
+
+add_executable(arm_accuracy_test.exe src/arm_accuracy_test.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(arm_accuracy_test.exe dxlsdk)
+
+add_executable(arm_accuracy_test_init.exe src/arm_accuracy_test_init.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(arm_accuracy_test_init.exe dxlsdk)

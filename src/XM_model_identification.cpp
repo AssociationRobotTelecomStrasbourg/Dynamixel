@@ -5,146 +5,110 @@
 #include <cstring>
 #include <ctime>
 #include <thread>
+#include <ratio>
 #include <chrono>
+#include <iomanip>
 
 extern "C"
 {
     #include <stdlib.h>
     #include <stdio.h>
+    #include <sys/resource.h>
 }
 
 int main(int argc,char** argv)
 {
-    createControlTable();
-    XM* Motor;
-    std::fstream fs;
-
-    if(argc>1)
+    int setpriosuccess;
+    setpriosuccess = setpriority(PRIO_PROCESS,0,-20);
+    if(!setpriosuccess)
     {
-        if(!strcmp(argv[1],"--change-baudrate"))
+        if(argc>2)
         {
-            int baudrate_old = atoi(argv[2]);
-            int baudrate_new = atoi(argv[3]);
-            std::cerr << "Debug : " << baudrate_old << "\t" << baudrate_new << std::endl;
-            Motor = new XM(1,baudrate_old);
-            std::cerr << "Debug : Motor detected\n";
-            uint8_t baudrate_new_code;
-            switch (baudrate_new)
+            createControlTable();
+            uint8_t id = atoi(argv[1]);
+            XM Motor(id,1000000);
+
+            std::fstream fs;
+
+            std::cerr << "Debug : Setting operating mode to PWM" << std::endl;
+            Motor.setOperatingMode((uint8_t) 16);
+            uint8_t op_mode;
+            Motor.generic_read("Operating Mode",op_mode);
+            std::cerr << "Debug : Operating Mode Check " << (unsigned)op_mode << std::endl;
+
+            Motor.torqueOn();
+            std::cerr << "Debug : Torque enabled" << std::endl;
+
+            int16_t goal_pwm = atoi(argv[2]);
+            if(abs(goal_pwm)<=885)
             {
-                case 9600:
-                    baudrate_new_code = 0;
-                    break;
-                case 57600:
-                    baudrate_new_code = 1;
-                    break;
-                case 115200:
-                    baudrate_new_code = 2;
-                    break;
-                case 1000000:
-                    baudrate_new_code = 3;
-                    break;
-                case 2000000:
-                    baudrate_new_code = 4;
-                    break;
-                case 3000000:
-                    baudrate_new_code = 5;
-                    break;
-                case 4000000:
-                    baudrate_new_code = 6;
-                    break;
-                case 4500000:
-                    baudrate_new_code = 7;
-                    break;
-                default:
-                    std::cerr << "Invalid new baudrate" << '\n';
-                    break;
-            }
-            std::cerr << "Debug : " << (int)baudrate_new_code << std::endl;
-            bool success = Motor->generic_write("Baud Rate",baudrate_new_code);
-            delete Motor;
-            if(success)
-            {
-                std::cerr << "Succeeded in changing baudrate" << std::endl;
-                Motor = new XM(1,baudrate_new);
+                int32_t pos;
+                char filename[20];
+                char output[20];
+
+                // clock_t t,t_sampling;
+                std::chrono::steady_clock::time_point t,t_sampling;
+                std::chrono::steady_clock::duration time_diff,time_diff_sampling;
+                double sample_time;
+                double time_ratio = (double)std::chrono::steady_clock::period::num / std::chrono::steady_clock::period::den;
+
+                sprintf(filename,"dataset%d_%03d.txt",id,goal_pwm);
+                std::cerr << "Debug : " << filename << std::endl;
+
+                Motor.generic_write("Goal PWM",(int16_t) 0);
+
+                fs.open(filename,std::fstream::out | std::fstream::trunc);
+                pos = Motor.getPresentVelocity();
+                t = std::chrono::steady_clock::now();
+                t_sampling = std::chrono::steady_clock::now();
+                do {
+                    time_diff_sampling = std::chrono::steady_clock::now()-t_sampling;
+                    time_diff = std::chrono::steady_clock::now()-t;
+                    if(time_diff_sampling.count()*time_ratio>=0.00400)
+                    {
+                        sample_time = time_diff.count()*time_ratio;
+                        pos = Motor.getPresentVelocity();
+                        sprintf(output,"%d\t%.3f",pos,sample_time);
+                        fs << output << std::endl;
+                        // std::cerr << "Debug:" << sample_time << std::endl;
+                        t_sampling=std::chrono::steady_clock::now();
+                    }
+                } while((time_diff.count()*time_ratio)<=0.050);
+
+                Motor.generic_write("Goal PWM",goal_pwm);
+
+                do {
+                    time_diff_sampling = std::chrono::steady_clock::now()-t_sampling;
+                    time_diff = std::chrono::steady_clock::now()-t;
+                    if(time_diff_sampling.count()*time_ratio>=0.00400)
+                    {
+                        sample_time = time_diff.count()*time_ratio;
+                        pos = Motor.getPresentVelocity();
+                        sprintf(output,"%d\t%.3f",pos,sample_time);
+                        fs << output << std::endl;
+                        // std::cerr << "Debug:" << sample_time << std::endl;
+                        t_sampling=std::chrono::steady_clock::now();
+                    }
+                } while((time_diff.count()*time_ratio)<=0.500);
+
+                fs.close();
+                goal_pwm=0;
+                Motor.generic_write("Goal PWM",goal_pwm);
+                Motor.torqueOff();
             }
             else
             {
-                std::cerr << "Failed in changing baudrate" << std::endl;
-                return -1;
+                std::cerr << "Wrong argument : Goal PWM exceeds 885 in absolute value" << std::endl;
             }
-        }
-        else if(!strcmp(argv[1],"--help"))
-        {
-            std::cout << "usage : identification --change-baudrate old_baudrate new_baudrate\nor \nidentification --no-change baudrate" << std::endl;
-            return 0;
-        }
-        else if(!strcmp(argv[1],"--no-change"))
-        {
-            int baudrate = atoi(argv[2]);
-            Motor = new XM(1,baudrate);
         }
         else
         {
-            std::cout << "usage : identification --change-baudrate old_baudrate new_baudrate\nor \nidentification --no-change baudrate" << std::endl;
-            return 0;
+            std::cerr << "usage : identification [id]" << std::endl;
         }
-        std::cerr << "Debug : Setting P gain to 1" << std::endl;
-        Motor->generic_write("Position P Gain",(uint16_t) 128);
-        Motor->torqueOn();
-        std::cerr << "Debug : Torque enabled" << std::endl;
-        //std::cerr << "Debug : " << Motor->setGoalPosition(0);
-        std::cerr << std::endl;
-        int32_t goal_pos[3]={1024,2048,3072};
-        int32_t pos;
-        char filename[20];
-        clock_t t,t_tempo,t_sampling;
-        //std::cerr << "Debug : Clock object created" << std::endl;
-        uint8_t mov_stat;
-        for(int i=0;i<3;i++)
-        {
-            sprintf(filename,"dataset%d.txt",i);
-            std::cerr << "Debug : " << filename << std::endl;
-            Motor->setGoalPosition(0);
-            fs.open(filename,std::fstream::out | std::fstream::trunc);
-            fs << goal_pos[i] << "\t" << 0.0 << std::endl;
-            do {
-                Motor->generic_read("Moving Status",mov_stat);
-            } while((!(mov_stat & 00000001)) && (!(mov_stat & 0001000)));
-            pos = Motor->getPresentPosition();
-            fs << pos << "\t" << 0.0 << std::endl;
-            std::cout << "Waiting for start...";
-            std::cin.get();
-            Motor->setGoalPosition(goal_pos[i]);
-            //std::cerr << "Debug : Goal " << (long)goal_pos[i] << std::endl;
-            t = clock();
-            do {
-                if((double)(clock()-t_sampling)/CLOCKS_PER_SEC>0.05)
-                {
-                    pos = Motor->getPresentPosition();
-                    fs << pos << "\t" << (double)(clock()-t)/CLOCKS_PER_SEC << std::endl;
-                    //std::cerr << "Debug:" << pos << "\t" << goal_pos[i] << "\t" << abs(pos-goal_pos[i]) << std::endl;
-                    t_sampling=clock();
-                }
-                Motor->generic_read("Moving Status",mov_stat);
-            } while((!(mov_stat & 00000001)) && (!(mov_stat & 0001000)));
-            t_tempo = clock();
-            do {
-                if((double)(clock()-t_sampling)/CLOCKS_PER_SEC>0.05)
-                {
-                    pos = Motor->getPresentPosition();
-                    fs << pos << "\t" << (double)(clock()-t)/CLOCKS_PER_SEC << std::endl;
-                    //std::cerr << "Debug:" << pos << "\t" << goal_pos[i] << "\t" << abs(pos-goal_pos[i]) << std::endl;
-                    t_sampling=clock();
-                }
-            } while((double)(clock()-t_tempo)/CLOCKS_PER_SEC<0.5);
-            fs.close();
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        }
-        Motor->torqueOff();
     }
     else
     {
-        std::cout << "usage : identification --change-baudrate old_baudrate new_baudrate\nor \nidentification --no-change baudrate" << std::endl;
-        return 0;
+        std::cerr << "Set priority failed. Exiting" << std::endl;
     }
+    return 0;
 }

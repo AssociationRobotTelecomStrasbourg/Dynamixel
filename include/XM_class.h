@@ -12,6 +12,7 @@ class XM
         XM(const uint8_t id=1, const int baudrate=57600, const char* port_name="/dev/ttyUSB0");
         ~XM();
 
+        bool changeID(uint8_t id);
         void reset(uint8_t option=0x02); // 0xFF : all parameters; 0x01 : all but ID; 0x02 : all but ID and baudrate
         void reboot();
 

@@ -4,6 +4,8 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
+#include <list>
+#include <string>
 
 extern "C"
 {
@@ -13,40 +15,26 @@ extern "C"
 int main(int argc, char** argv)
 {
     createControlTable();
-    XM_bulk_chain Chain(5,1000000);
+    XM_bulk_chain Chain(4,1000000);
 
-    std::cout << "Initializing velocity and acceleration profiles...";
-    uint32_t pro_vel = 131; //180° rotation in 1 s
-    uint32_t pro_acc = pro_vel/2;
-    for(int id=1;id<5;id++)
-    {
-        Chain.setParam(id,"Profile Velocity",pro_vel);
-    }
-    Chain.write();
-    for(int id=1;id<5;id++)
-    {
-        Chain.setParam(id,"Profile Acceleration",pro_acc);
-    }
-    Chain.write();
-    std::cout << "Done" << std::endl;
-
-    char* fname,* ftemp;
+    char cstr_save[60];
+    std::list<std::string> save_str;
+    char* fname;
     if(argc>1)
     {fname = argv[1];}
     else
-    {fname="demo.txt";ftemp="demo_temp.txt";}
+    {fname="demo.txt";}
 
-    std::fstream fs_temp(ftemp,std::fstream::out | std::fstream::trunc);
     std::fstream fs;
-    fs.close();
 
-    int32_t pos[4];
-    for(int id=1;id<5;id++)
+    int32_t pos[3];
+    for(int id=1;id<4;id++)
     {
         Chain.monitorParam(id,"Present Position");
     }
 
     int nb_poses = 0;
+    int goal_cur=0;
 
     while(true)
     {
@@ -56,62 +44,70 @@ int main(int argc, char** argv)
         if(c=='r')
         {
             Chain.poll();
-            for(int id=1;id<5;id++)
+            for(int id=1;id<4;id++)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
-            for(int i=1;i<5;i++)
-            {
-                // std::cout << (long)*(pos+(i-1)) << "\t";
-                fs_temp << (long)*(pos+(i-1)) << "\t";
-            }
-            // std::cout << (long)*(pos+3) << "\n";
-            fs_temp << (int)0 << "\n";
-            std::cout << "Pose : " << ++nb_poses << std::endl;
+            // for(int i=1;i<4;i++)
+            // {
+            //     // std::cout << (long)*(pos+(i-1)) << "\t";
+            //     fs_temp << (long)*(pos+(i-1)) << "\t";
+            // }
+            // fs_temp << goal_cur << "\n";
+            sprintf(cstr_save,"%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),goal_cur);
+            save_str.push_back(cstr_save);
+            std::cout << "Pose: " << ++nb_poses << std::endl;
+            std::cout << "Saving: " << cstr_save;
         }
         else if(c=='c')
         {
+            goal_cur = 200;
             Chain.poll();
-            for(int id=1;id<5;id++)
+            for(int id=1;id<4;id++)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
-            for(int i=1;i<5;i++)
-            {
-                // std::cout << (long)*(pos+(i-1)) << "\t";
-                fs_temp << (long)*(pos+(i-1)) << "\t";
-            }
-            // std::cout << (long)*(pos+3) << "\n";
-            fs_temp << (int)200 << "\n";
-            std::cout << "Pose : " << ++nb_poses << std::endl;
+            // for(int i=1;i<4;i++)
+            // {
+            //     // std::cout << (long)*(pos+(i-1)) << "\t";
+            //     fs_temp << (long)*(pos+(i-1)) << "\t";
+            // }
+            // fs_temp << goal_cur << "\n";
+            sprintf(cstr_save,"%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),goal_cur);
+            save_str.push_back(cstr_save);
+            std::cout << "Pose: " << ++nb_poses << std::endl;
+            std::cout << "Saving: " << cstr_save;
         }
         else if(c=='o')
         {
+            goal_cur = -200;
             Chain.poll();
-            for(int id=1;id<5;id++)
+            for(int id=1;id<4;id++)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
-            for(int i=1;i<5;i++)
-            {
-                // std::cout << (long)*(pos+(i-1)) << "\t";
-                fs_temp << (long)*(pos+(i-1)) << "\t";
-            }
-            // std::cout << (long)*(pos+3) << "\n";
-            fs_temp << (int)-200 << "\n";
-            std::cout << "Pose : " << ++nb_poses << std::endl;
+            // for(int i=1;i<4;i++)
+            // {
+            //     // std::cout << (long)*(pos+(i-1)) << "\t";
+            //     fs_temp << (long)*(pos+(i-1)) << "\t";
+            // }
+            // fs_temp << goal_cur << "\n";
+            sprintf(cstr_save,"%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),goal_cur);
+            save_str.push_back(cstr_save);
+            std::cout << "Pose: " << ++nb_poses << std::endl;
+            std::cout << "Saving: " << cstr_save;
+            goal_cur = 0;
         }
         else if(c=='q')
         {
-            fs_temp.close();
-            fs_temp.open(ftemp,std::fstream::in);
             fs.open(fname,std::fstream::out);
             fs << nb_poses << std::endl;
-            char temp[100];
-            do {
-                fs_temp.getline(temp,100);
-                fs << temp << std::endl;
-            } while(!fs_temp.eof());
+            std::cerr << "Debug: save_str contains " << save_str.size() << "strings" << std::endl;
+            for(auto it = save_str.begin(); it != save_str.end(); it++)
+            {
+                std::cerr << "Debug: Writing " << *it;
+                fs << *it;
+            }
             fs.close();
             break;
         }
