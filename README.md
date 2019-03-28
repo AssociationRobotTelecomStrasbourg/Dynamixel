@@ -11,6 +11,8 @@ C++ code aiming to facilitate the use of the dynamixel motors :
 - XM_class : initialization and control of a unique motor
 - XM_bulk_chain : initialization and control of several motors with different control items simultaneously
 - XM_sync_chain : initialization and control of several motors with a unique control item at a given time (TODO)
+### doc
+pdf file to explain how to use the motors
 
 ## How to use
 To compile this library :
@@ -19,3 +21,8 @@ To compile this library :
 - mkdir bin build lib && cd build
 - cmake ..
 - make
+
+## To do
+- Complete documentation
+- Create sync functions class & methods
+- Reorganize files structure (necessary functions, arm w/ gripper, arm w/o gripper, ...)

@@ -47,24 +47,24 @@ int main(int argc, char** argv)
         std::cout << "Initializing velocity and acceleration profiles...";
         uint32_t pro_vel = 131; // quarter of turn in 1 sec
         uint32_t pro_acc = 17;
-        for(int id=1;id<4;id++)
+        for(int id=1;id<5;id++)
         {
             Chain.setParam(id,"Profile Velocity",pro_vel);
         }
         Chain.write();
-        for(int id=1;id<4;id++)
+        for(int id=1;id<5;id++)
         {
             Chain.setParam(id,"Profile Acceleration",pro_acc);
         }
         Chain.write();
         std::cout << "Done" << std::endl;
 
-        int32_t goal_pos[3];
-        for(int i=0;i<3;i++)
+        int32_t goal_pos[4];
+        for(int i=0;i<4;i++)
         {
             goal_pos[i]=atoi(argv[i+2]);
         }
-        for(int id=1;id<4;id++)
+        for(int id=1;id<5;id++)
         {
             Chain.torqueOn(id);
             Chain.setParam(id,"Goal Position",goal_pos[id-1]);
@@ -73,6 +73,6 @@ int main(int argc, char** argv)
     }
     else
     {
-        std::cerr << "usage: arm_accuracy_test_init id2test goal_pos1 goal_pos2 goal_pos3" << std::endl;
+        std::cerr << "usage: arm_accuracy_test_init id2test goal_pos1 goal_pos2 goal_pos3 goal_pos4" << std::endl;
     }
 }

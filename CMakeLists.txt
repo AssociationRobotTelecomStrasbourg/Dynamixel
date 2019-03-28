@@ -63,3 +63,6 @@ target_link_libraries(arm_accuracy_test.exe dxlsdk)
 
 add_executable(arm_accuracy_test_init.exe src/arm_accuracy_test_init.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
 target_link_libraries(arm_accuracy_test_init.exe dxlsdk)
+
+add_executable(arm_gotopos.exe src/arm_gotopos.cpp src/XM_bulk_chain.cpp src/XM430-W210_Control_Table.cpp)
+target_link_libraries(arm_gotopos.exe dxlsdk)

@@ -23,12 +23,12 @@ int main(int argc, char** argv)
     std::cout << "Initializing velocity and acceleration profiles...";
     uint32_t pro_vel = 131; // quarter of turn in 1 sec
     uint32_t pro_acc = 17;
-    for(int id=1;id<4;id++)
+    for(int id=1;id<5;id++)
     {
         Chain.setParam(id,"Profile Velocity",pro_vel);
     }
     Chain.write();
-    for(int id=1;id<4;id++)
+    for(int id=1;id<5;id++)
     {
         Chain.setParam(id,"Profile Acceleration",pro_acc);
     }

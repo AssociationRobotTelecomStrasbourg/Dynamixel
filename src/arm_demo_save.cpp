@@ -15,7 +15,7 @@ extern "C"
 int main(int argc, char** argv)
 {
     createControlTable();
-    XM_bulk_chain Chain(4,1000000);
+    XM_bulk_chain Chain(5,1000000);
 
     char cstr_save[60];
     std::list<std::string> save_str;
@@ -27,8 +27,8 @@ int main(int argc, char** argv)
 
     std::fstream fs;
 
-    int32_t pos[3];
-    for(int id=1;id<4;id++)
+    int32_t pos[4];
+    for(int id=1;id<5;id++)
     {
         Chain.monitorParam(id,"Present Position");
     }
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
         if(c=='r')
         {
             Chain.poll();
-            for(int id=1;id<4;id++)
+            for(int id=1;id<5;id++)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
             //     fs_temp << (long)*(pos+(i-1)) << "\t";
             // }
             // fs_temp << goal_cur << "\n";
-            sprintf(cstr_save,"%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),goal_cur);
+            sprintf(cstr_save,"%ld\t%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),(long)*(pos+3),goal_cur);
             save_str.push_back(cstr_save);
             std::cout << "Pose: " << ++nb_poses << std::endl;
             std::cout << "Saving: " << cstr_save;
@@ -63,7 +63,7 @@ int main(int argc, char** argv)
         {
             goal_cur = 200;
             Chain.poll();
-            for(int id=1;id<4;id++)
+            for(int id=1;id<5;id++)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
             //     fs_temp << (long)*(pos+(i-1)) << "\t";
             // }
             // fs_temp << goal_cur << "\n";
-            sprintf(cstr_save,"%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),goal_cur);
+            sprintf(cstr_save,"%ld\t%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),(long)*(pos+3),goal_cur);
             save_str.push_back(cstr_save);
             std::cout << "Pose: " << ++nb_poses << std::endl;
             std::cout << "Saving: " << cstr_save;
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
         {
             goal_cur = -200;
             Chain.poll();
-            for(int id=1;id<4;id++)
+            for(int id=1;id<5;id++)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
@@ -92,7 +92,7 @@ int main(int argc, char** argv)
             //     fs_temp << (long)*(pos+(i-1)) << "\t";
             // }
             // fs_temp << goal_cur << "\n";
-            sprintf(cstr_save,"%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),goal_cur);
+            sprintf(cstr_save,"%ld\t%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),(long)*(pos+3),goal_cur);
             save_str.push_back(cstr_save);
             std::cout << "Pose: " << ++nb_poses << std::endl;
             std::cout << "Saving: " << cstr_save;
