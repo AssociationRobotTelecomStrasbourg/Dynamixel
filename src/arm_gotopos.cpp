@@ -9,27 +9,28 @@ extern "C"
 
 int main(int argc, char const **argv)
 {
-    createControlTable();
-    XM_bulk_chain Arm(4,1000000);
-
-    std::cerr << "Initializing velocity and acceleration profiles...";
-    uint32_t pro_vel = 131; // quarter of turn in 1 sec
-    uint32_t pro_acc = 17;
-    for(int id=1;id<5;id++)
-    {
-        Arm.setParam(id,"Profile Velocity",pro_vel);
-    }
-    Arm.write();
-    for(int id=1;id<5;id++)
-    {
-        Arm.setParam(id,"Profile Acceleration",pro_acc);
-    }
-    Arm.write();
-    std::cerr << "Done" << std::endl;
-
-    int32_t goal_pos[4];
     if(argc==5)
     {
+        createControlTable();
+        XM_bulk_chain Arm(4,1000000);
+
+        std::cerr << "Initializing velocity and acceleration profiles...";
+        uint32_t pro_vel = 131; // quarter of turn in 1 sec
+        uint32_t pro_acc = 17;
+        for(int id=1;id<5;id++)
+        {
+            Arm.setParam(id,"Profile Velocity",pro_vel);
+        }
+        Arm.write();
+        for(int id=1;id<5;id++)
+        {
+            Arm.setParam(id,"Profile Acceleration",pro_acc);
+        }
+        Arm.write();
+        std::cerr << "Done" << std::endl;
+
+        int32_t goal_pos[4];
+        
         for (int i = 0; i < 4; i++)
         {
             *(goal_pos+i) = atoi(argv[i+1]);
