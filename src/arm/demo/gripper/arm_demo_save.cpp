@@ -48,12 +48,6 @@ int main(int argc, char** argv)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
-            // for(int i=1;i<4;i++)
-            // {
-            //     // std::cout << (long)*(pos+(i-1)) << "\t";
-            //     fs_temp << (long)*(pos+(i-1)) << "\t";
-            // }
-            // fs_temp << goal_cur << "\n";
             sprintf(cstr_save,"%ld\t%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),(long)*(pos+3),goal_cur);
             save_str.push_back(cstr_save);
             std::cout << "Pose: " << ++nb_poses << std::endl;
@@ -67,12 +61,6 @@ int main(int argc, char** argv)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
-            // for(int i=1;i<4;i++)
-            // {
-            //     // std::cout << (long)*(pos+(i-1)) << "\t";
-            //     fs_temp << (long)*(pos+(i-1)) << "\t";
-            // }
-            // fs_temp << goal_cur << "\n";
             sprintf(cstr_save,"%ld\t%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),(long)*(pos+3),goal_cur);
             save_str.push_back(cstr_save);
             std::cout << "Pose: " << ++nb_poses << std::endl;
@@ -86,12 +74,6 @@ int main(int argc, char** argv)
             {
                 Chain.getData(id,*(pos+(id-1)));
             }
-            // for(int i=1;i<4;i++)
-            // {
-            //     // std::cout << (long)*(pos+(i-1)) << "\t";
-            //     fs_temp << (long)*(pos+(i-1)) << "\t";
-            // }
-            // fs_temp << goal_cur << "\n";
             sprintf(cstr_save,"%ld\t%ld\t%ld\t%ld\t%d\n",(long)*pos,(long)*(pos+1),(long)*(pos+2),(long)*(pos+3),goal_cur);
             save_str.push_back(cstr_save);
             std::cout << "Pose: " << ++nb_poses << std::endl;

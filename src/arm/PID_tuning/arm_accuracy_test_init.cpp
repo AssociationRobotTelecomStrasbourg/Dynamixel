@@ -13,13 +13,34 @@ int main(int argc, char** argv)
     createControlTable();
     XM_bulk_chain Chain(4,1000000);
 
-    if(argc>4)
+    if(argc==5)
     {
+        for(int id=1;id<5;id++)
+        {
+            Chain.torqueOn(id);
+        }
+
+        std::cout << "Initializing velocity and acceleration profiles...";
+        uint32_t pro_vel = 131; // quarter of turn in 1 sec
+        uint32_t pro_acc = 17;
+        for(int id=1;id<5;id++)
+        {
+            Chain.setParam(id,"Profile Velocity",pro_vel);
+        }
+        Chain.write();
+        for(int id=1;id<5;id++)
+        {
+            Chain.setParam(id,"Profile Acceleration",pro_acc);
+        }
+        Chain.write();
+        std::cout << "Done" << std::endl;
+
         uint8_t id2test = atoi(argv[1]);
+
         std::cout << "Initializing PID..." << std::endl;
-        uint16_t P_gain=800;
-        uint16_t I_gain=0;
-        uint16_t D_gain=0;
+        uint16_t P_gain=atoi(argv[2]);
+        uint16_t I_gain=atoi(argv[3]);
+        uint16_t D_gain=atoi(argv[4]);
         std::cout << "P: " << P_gain << std::endl;
         std::cout << "I: " << I_gain << std::endl;
         std::cout << "D: " << D_gain << std::endl;
@@ -43,36 +64,9 @@ int main(int argc, char** argv)
         std::cout << "P: " << P_gain << std::endl;
         std::cout << "I: " << I_gain << std::endl;
         std::cout << "D: " << D_gain << std::endl;
-
-        std::cout << "Initializing velocity and acceleration profiles...";
-        uint32_t pro_vel = 131; // quarter of turn in 1 sec
-        uint32_t pro_acc = 17;
-        for(int id=1;id<5;id++)
-        {
-            Chain.setParam(id,"Profile Velocity",pro_vel);
-        }
-        Chain.write();
-        for(int id=1;id<5;id++)
-        {
-            Chain.setParam(id,"Profile Acceleration",pro_acc);
-        }
-        Chain.write();
-        std::cout << "Done" << std::endl;
-
-        int32_t goal_pos[4];
-        for(int i=0;i<4;i++)
-        {
-            goal_pos[i]=atoi(argv[i+2]);
-        }
-        for(int id=1;id<5;id++)
-        {
-            Chain.torqueOn(id);
-            Chain.setParam(id,"Goal Position",goal_pos[id-1]);
-        }
-        Chain.write();
     }
     else
     {
-        std::cerr << "usage: arm_accuracy_test_init id2test goal_pos1 goal_pos2 goal_pos3 goal_pos4" << std::endl;
+        std::cerr << "usage: arm_accuracy_test_init.exe id2test P I D" << std::endl;
     }
 }

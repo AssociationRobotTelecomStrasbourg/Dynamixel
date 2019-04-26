@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
         std::set<uint8_t> id_list = Chain.getIDlist();
         int n_dxl = id_list.size();
-        std::cerr << "Warning: Press ENTER to disable torque on all detected dynamixels" << std::endl;
+        std::cerr << "Warning: Press ENTER to disable torque on all detected dynamixels (doing so means the arm will fall if it's not secured)" << std::endl;
         std::cin.get();
         for(int id=1;id<(n_dxl+1);id++)
         {
