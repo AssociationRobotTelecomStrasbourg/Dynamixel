@@ -19,6 +19,8 @@ C++ code aiming to facilitate the use of the dynamixel motors :
 python programme to convert 3D coordinates in angular positions for each motor in the arm
 ### doc
 pdf file to explain how to use the motors
+### BerryArm
+implementation on RaspberryPi platform (not functional as PixyCam modules are missing)
 
 ## How to use
 To compile this library :
@@ -31,4 +33,4 @@ To compile this library :
 ## To do
 - Complete documentation
 - Create sync functions class & methods
-- Reorganize files structure (necessary functions, arm w/ gripper, arm w/o gripper, ...)
+- Revise control table to make its use generic

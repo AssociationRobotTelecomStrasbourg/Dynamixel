@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(ARTS_Dynamixel)
 
-find_package(Curses REQUIRED)
 find_package(Threads REQUIRED)
 
 include_directories(include dynamixel_sdk_c/include/dynamixel_sdk)
@@ -43,16 +42,15 @@ add_executable(Chain_change_baud.exe src/utilities/XM_bulk_chain_change_baudrate
 target_link_libraries(Chain_change_baud.exe dxlsdk)
 
 add_executable(XM_bulk_chain_monitor.exe src/utilities/XM_bulk_chain_monitor.cpp src/classes/XM_bulk_chain.cpp src/classes/XM430-W210_Control_Table.cpp)
-target_link_libraries(XM_bulk_chain_monitor.exe dxlsdk ncurses)
+target_link_libraries(XM_bulk_chain_monitor.exe dxlsdk)
 
-# demo
-# gripper
+# demo gripper
 add_executable(arm_demo_save.exe src/arm/demo/gripper/arm_demo_save.cpp src/classes/XM_bulk_chain.cpp src/classes/XM430-W210_Control_Table.cpp)
-target_link_libraries(arm_demo_save.exe dxlsdk ncurses)
+target_link_libraries(arm_demo_save.exe dxlsdk)
 
 add_executable(arm_demo_load.exe src/arm/demo/gripper/arm_demo_load.cpp src/classes/XM_bulk_chain.cpp src/classes/XM430-W210_Control_Table.cpp)
 target_link_libraries(arm_demo_load.exe dxlsdk)
-# pen
+# demo pen
 add_executable(learn2write.exe src/arm/demo/pen/learn2write.cpp src/classes/XM_bulk_chain.cpp src/classes/XM430-W210_Control_Table.cpp)
 target_link_libraries(learn2write.exe dxlsdk ${CMAKE_THREAD_LIBS_INIT})
 
@@ -66,5 +64,8 @@ target_link_libraries(arm_accuracy_test_init.exe dxlsdk)
 # arm
 add_executable(arm_gotopos.exe src/arm/arm_gotopos.cpp src/classes/XM_bulk_chain.cpp src/classes/XM430-W210_Control_Table.cpp)
 target_link_libraries(arm_gotopos.exe dxlsdk)
+
+add_executable(arm_init.exe src/arm/arm_init.cpp src/classes/XM_bulk_chain.cpp src/classes/XM430-W210_Control_Table.cpp)
+target_link_libraries(arm_init.exe dxlsdk)
 
 # misc

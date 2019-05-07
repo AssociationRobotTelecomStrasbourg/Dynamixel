@@ -62,16 +62,16 @@ def coord2D_abg(r,z,angle=0):   #donne la position de l'objet ainsi que l'angle 
 
         gamma=gamma*pi/180
         gamma=simplify_angle(gamma)
-        if(abs(alpha)<pi/2 and abs(beta)<pi/2 and abs(gamma)<pi/2):
-            return [alpha, beta, gamma]
-        else:
-            print >>sys.stderr, "Non-accessible point: over-constrained angle"
-            alpha = beta = gamma = 0
-            return [alpha, beta, gamma]
-    else:
-        print >>sys.stderr, "Non-accessible point: out of reach"
-        alpha = beta = gamma = 0
-        return [alpha, beta, gamma]
+    #     if(abs(alpha)<pi/2 and abs(beta)<pi/2 and abs(gamma)<pi/2):
+    #         return [alpha, beta, gamma]
+    #     else:
+    #         print >>sys.stderr, "Non-accessible point: over-constrained angle"
+    #         alpha = beta = gamma = 0
+    #         return [alpha, beta, gamma]
+    # else:
+    #     print >>sys.stderr, "Non-accessible point: out of reach"
+    #     alpha = beta = gamma = 0
+    #     return [alpha, beta, gamma]
 
 
 def coord3D_abg(x,y,z,angle=0):
@@ -88,8 +88,11 @@ def rad2mot(theta,alpha,beta,gamma): #les moteurs sont positionne inversement au
     mot2=round(((-alpha)*(180/pi)+180)/0.087890625)
     mot3=round(((-beta)*(180/pi)+180)/0.087890625)
     mot4=round(((-gamma)*(180/pi)+180)/0.087890625)
-
-    return (mot1,mot2,mot3,mot4)
+    if(mot1<0 or mot1>4094 or mot2<760 or mot2>3200 or mot3<800 or mot3>3000 or mot4<1050 or mot4>3370):
+        mot1 = mot2 = mot3 = mot4 = 2048
+        print >>sys.stderr, "Non-accessible point"
+    else:
+        return (mot1,mot2,mot3,mot4)
 
 # def draw_bras2D(alpha, beta, gamma, option=False):
 #
@@ -149,25 +152,36 @@ def rad2mot(theta,alpha,beta,gamma): #les moteurs sont positionne inversement au
    ## script attraper palet au sol (le rendre generique)
 
 xposcam=0
-yposcam=0
+yposcam=-6.6
 coord=[]
 coord=sys.argv
 L=len(coord)
-if (L==3):
+if (L==4):
     xcam=float(coord[1])
     ycam=float(coord[2])
     z=-10 # a voir avec la base mobile
-    x=ycam+xposcam #a voir avec base mobile
-    y=yposcam-xcam # avoir avec base mobile axe de la pixie dans le sens oppose au modele
+    x=xcam+xposcam
+    y=yposcam+ycam
     angle=90
-elif (L==5):
+    obj_catch=int(coord[3])
+elif (L==6):
    x=float(coord[1])
    y=float(coord[2])
    z=float(coord[3])
    angle=float(coord[4])
+   obj_catch=int(coord[5])
 else:
     print >>sys.stderr, 'error'
 theta,alpha,beta,gamma= coord3D_abg(x,y,z,angle)
 mot1,mot2,mot3,mot4=rad2mot(theta,alpha,beta,gamma)
 
-print >>sys.stdout, str(mot1) + ' ' + str(mot2) + ' ' + str(mot3) + ' ' + str(mot4)
+print >>sys.stdout, str(mot1) + ' ' + str(mot2) + ' ' + str(mot3) + ' ' + str(mot4) + ' ' + str(obj_catch)
+
+try:
+    sys.stdout.close()
+except:
+    pass
+try:
+    sys.stderr.close()
+except:
+    pass
