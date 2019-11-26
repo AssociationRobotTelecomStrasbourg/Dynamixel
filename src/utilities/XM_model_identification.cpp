@@ -85,7 +85,7 @@ int main(int argc,char** argv)
                         sample_time = time_diff.count()*time_ratio;
                         pos = Motor.getPresentVelocity();
                         sprintf(output,"%d\t%.3f",pos,sample_time);
-                        fs << output << std::endl;
+                        fs << output << std::endl; //should be changed to store in an array-like and write in file only after sampling is finished
                         // std::cerr << "Debug:" << sample_time << std::endl;
                         t_sampling=std::chrono::steady_clock::now();
                     }
